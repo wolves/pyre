@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -67,5 +68,16 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	}
+
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+	sunbirdDir := viper.GetString("sunbird_dir")
+	projPath := filepath.Join(homeDir, sunbirdDir)
+
+	if _, err := os.Stat(projPath); os.IsNotExist(err) {
+		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
 	}
 }
