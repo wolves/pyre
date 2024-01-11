@@ -1,31 +1,45 @@
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2024 Christopher Stingl <cs@wlvs.io>
 */
 package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/wolves/pyre/cmd/feature"
 )
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Create a new Sunbird project feature",
+	Long: `Create a Sunbird project feature
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Generates the necessary Angular files for a default, bare-bones
+project feature component. This includes the component files along with
+specs, styles, and ngrx state management files.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called")
+		fmt.Println("create called", args)
+
+		sbDir := viper.GetString("sunbird_dir")
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		f := feature.Component{
+			ProjectPath: filepath.Join(home, sbDir),
+			Name:        args[0],
+		}
+
+		fmt.Printf("Component %+v", f)
 	},
 }
 
 func init() {
+	cobra.OnInitialize(initConfig)
 	featureCmd.AddCommand(createCmd)
 
 	// Here you will define your flags and configuration settings.

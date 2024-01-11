@@ -17,3 +17,15 @@ var featureComponentTemplate []byte
 func IndexTemplate() []byte {
 	return indexTemplate
 }
+
+func NgPackageTemplate() []byte {
+	return ngPackageTemplate
+}
+
+func PublicApiTemplate() []byte {
+	return publicApiTemplate
+}
+
+func FeatureComponentTemplate() []byte {
+	return featureComponentTemplate
+}

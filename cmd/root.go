@@ -34,7 +34,7 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	// cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -49,14 +49,14 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	// Find home directory.
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
 		// Search config in home directory with name ".pyre" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
@@ -70,6 +70,17 @@ func initConfig() {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 
+	sunbirdDir := viper.GetString("sunbird_dir")
+	projPath := filepath.Join(home, sunbirdDir)
+
+	fmt.Printf("THE DIR: %s\n", projPath)
+
+	if _, err := os.Stat(projPath); os.IsNotExist(err) {
+		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
+	}
+}
+
+func getSunbirdDir() string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		cobra.CheckErr(err)
@@ -77,7 +88,5 @@ func initConfig() {
 	sunbirdDir := viper.GetString("sunbird_dir")
 	projPath := filepath.Join(homeDir, sunbirdDir)
 
-	if _, err := os.Stat(projPath); os.IsNotExist(err) {
-		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
-	}
+	return projPath
 }
