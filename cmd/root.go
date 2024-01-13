@@ -70,23 +70,18 @@ func initConfig() {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 
-	sunbirdDir := viper.GetString("sunbird_dir")
-	projPath := filepath.Join(home, sunbirdDir)
-
-	fmt.Printf("THE DIR: %s\n", projPath)
-
-	if _, err := os.Stat(projPath); os.IsNotExist(err) {
-		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
-	}
 }
 
 func getSunbirdDir() string {
 	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		cobra.CheckErr(err)
-	}
+	cobra.CheckErr(err)
+
 	sunbirdDir := viper.GetString("sunbird_dir")
 	projPath := filepath.Join(homeDir, sunbirdDir)
+
+	if _, err := os.Stat(projPath); os.IsNotExist(err) {
+		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
+	}
 
 	return projPath
 }

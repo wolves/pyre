@@ -3,9 +3,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   standalone: true,
   imports: [],
-  selector: "lib-{{.Name}}",
-  templateUrl: "./{{.Name}}.component.html",
-  styleUrls: ["./{{.Name}}.component.scss"],
+  selector: "lib-{{.Filename}}",
+  templateUrl: "./{{.Filename}}.component.html",
+  styleUrls: ["./{{.Filename}}.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class {{.Name}}Component {

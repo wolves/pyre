@@ -5,8 +5,7 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -25,16 +24,18 @@ specs, styles, and ngrx state management files.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("create called", args)
 
-		sbDir := viper.GetString("sunbird_dir")
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
+		projects := viper.Get("projects")
 
-		f := feature.Component{
-			ProjectPath: filepath.Join(home, sbDir),
-			Name:        args[0],
+		fmt.Println("Projs", projects)
+
+		c := feature.Component{
+			SunbirdDir: getSunbirdDir(),
+			Filename:   args[0],
+			Name:       kebabToTitle(args[0]),
 		}
 
-		fmt.Printf("Component %+v", f)
+		err := c.Create()
+		cobra.CheckErr(err)
 	},
 }
 
@@ -51,4 +52,12 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func kebabToTitle(s string) string {
+	words := strings.Split(s, "-")
+	for i, word := range words {
+		words[i] = strings.Title(word)
+	}
+	return strings.Join(words, "")
 }
