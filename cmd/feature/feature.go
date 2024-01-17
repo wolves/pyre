@@ -33,6 +33,9 @@ func (c *Component) Create() error {
 	srcPath, err := createSrcDir(featPath)
 	cobra.CheckErr(err)
 
+	statePath, err := createStateDir(featPath)
+	cobra.CheckErr(err)
+
 	indexFile, err := os.Create(filepath.Join(featPath, "index.ts"))
 	cobra.CheckErr(err)
 	defer indexFile.Close()
@@ -62,6 +65,9 @@ func (c *Component) Create() error {
 	if err != nil {
 		return err
 	}
+
+	err = createStateFiles(statePath)
+	cobra.CheckErr(err)
 
 	componentFile, err := os.Create(filepath.Join(srcPath, c.Filename+".component.ts"))
 	cobra.CheckErr(err)
@@ -104,4 +110,23 @@ func createSrcDir(featPath string) (string, error) {
 	}
 
 	return srcPath, nil
+}
+
+func createStateDir(featPath string) (string, error) {
+	statePath := filepath.Join(featPath, "+state")
+	if _, err := os.Stat(statePath); os.IsNotExist(err) {
+		err = os.Mkdir(statePath, 0o751)
+		if err != nil {
+			log.Printf("Error creating +state directory: %v\n", err)
+			return "", err
+		}
+	} else {
+		log.Printf("+state directory with path '%s' already exists", statePath)
+	}
+
+	return statePath, nil
+}
+
+func createStateFiles(statePath string) error {
+	return nil
 }
