@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/wolves/pyre/cmd/templates"
@@ -18,6 +19,7 @@ type Component struct {
 
 	srcPath   string
 	statePath string
+	i18nPath  string
 }
 
 func (c *Component) Create() error {
@@ -37,9 +39,18 @@ func (c *Component) Create() error {
 	cobra.CheckErr(err)
 	c.srcPath = srcPath
 
-	statePath, err := createStateDir(featPath)
+	statePath, err := c.createStateDir()
 	cobra.CheckErr(err)
 	c.statePath = statePath
+
+	langs := []string{"de", "en", "fr", "ja", "ru", "tr", "zh"}
+
+	i18nPath, err := c.createI18nDirs(langs)
+	cobra.CheckErr(err)
+	c.i18nPath = i18nPath
+
+	err = c.createI18nFiles(langs)
+	cobra.CheckErr(err)
 
 	indexFile, err := os.Create(filepath.Join(featPath, "index.ts"))
 	cobra.CheckErr(err)
@@ -117,8 +128,8 @@ func createSrcDir(featPath string) (string, error) {
 	return srcPath, nil
 }
 
-func createStateDir(featPath string) (string, error) {
-	statePath := filepath.Join(featPath, "+state")
+func (c Component) createStateDir() (string, error) {
+	statePath := filepath.Join(c.srcPath, "+state")
 	if _, err := os.Stat(statePath); os.IsNotExist(err) {
 		err = os.Mkdir(statePath, 0o751)
 		if err != nil {
@@ -155,6 +166,91 @@ func (c Component) createStateFiles() error {
 		if err != nil {
 			return fmt.Errorf("Error: State template execution error: %v", err)
 		}
+	}
+
+	return nil
+}
+
+func (c Component) createI18nDirs(langs []string) (string, error) {
+	i18nPath := filepath.Join(c.srcPath, "assets/translations")
+	if _, err := os.Stat(i18nPath); os.IsNotExist(err) {
+		err = os.MkdirAll(i18nPath, 0o751)
+		if err != nil {
+			log.Printf("Error creating i18n directory: %v\n", err)
+			return "", err
+		}
+	} else {
+		log.Printf("i18n directory with path '%s' already exists", i18nPath)
+	}
+
+	for _, lang := range langs {
+		langPath := filepath.Join(i18nPath, lang)
+		if _, err := os.Stat(langPath); os.IsNotExist(err) {
+			err = os.Mkdir(langPath, 0o751)
+			if err != nil {
+				log.Printf("Error creating i18n %s directory: %v\n", lang, err)
+				return "", err
+			}
+		} else {
+			log.Printf("i18n language directory with path '%s' already exists", langPath)
+		}
+	}
+
+	return i18nPath, nil
+}
+
+func (c Component) createI18nFiles(langs []string) error {
+	data := struct {
+		I18nKey  string
+		LangList []string
+		Lang     string
+		Filename string
+		Name     string
+	}{
+		I18nKey:  strings.ToUpper(strings.ReplaceAll(c.Filename, "-", "_")),
+		LangList: langs,
+		Filename: c.Filename,
+		Name:     c.Name,
+	}
+
+	for _, lang := range langs {
+		createdFile, err := os.Create(filepath.Join(c.i18nPath, lang, c.Filename+".i18n.ts"))
+		if err != nil {
+			return fmt.Errorf("Error: i18n file creation error: %v", err)
+		}
+		defer createdFile.Close()
+
+		createdIdx, err := os.Create(filepath.Join(c.i18nPath, lang, "index.ts"))
+		if err != nil {
+			return fmt.Errorf("Error: i18n file creation error: %v", err)
+		}
+		defer createdIdx.Close()
+
+		data.Lang = lang
+
+		createdTmpl := template.Must(template.New(lang).Parse(string(templates.I18nTemplate())))
+		err = createdTmpl.Execute(createdFile, data)
+		if err != nil {
+			return fmt.Errorf("Error: i18n template execution error: %v", err)
+		}
+
+		createdIdxTmpl := template.Must(template.New(lang + "Idx").Parse(string(templates.I18nIndexTemplate())))
+		err = createdIdxTmpl.Execute(createdIdx, data)
+		if err != nil {
+			return fmt.Errorf("Error: i18n index template execution error: %v", err)
+		}
+	}
+
+	createdTranslationsFile, err := os.Create(filepath.Join(c.i18nPath, "translations.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: i18n translations file creation error: %v", err)
+	}
+	defer createdTranslationsFile.Close()
+
+	createdTranslationsTmpl := template.Must(template.New("translations").Parse(string(templates.TranslationsTemplate())))
+	err = createdTranslationsTmpl.Execute(createdTranslationsFile, data)
+	if err != nil {
+		return fmt.Errorf("Error: i18n translations template execution error: %v", err)
 	}
 
 	return nil

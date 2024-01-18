@@ -71,3 +71,24 @@ func CreateStateTemplate(key string) []byte {
 
 	return []byte{}
 }
+
+//go:embed files/translations/translations.ts.tmpl
+var translationsTemplate []byte
+
+//go:embed files/translations/feature.i18n.ts.tmpl
+var i18nTemplate []byte
+
+//go:embed files/translations/index.ts.tmpl
+var i18nIndexTemplate []byte
+
+func TranslationsTemplate() []byte {
+	return translationsTemplate
+}
+
+func I18nTemplate() []byte {
+	return i18nTemplate
+}
+
+func I18nIndexTemplate() []byte {
+	return i18nIndexTemplate
+}

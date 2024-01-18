@@ -1,0 +1,17 @@
+{{range .LangList}}
+import { {{.}} } from './{{.}}';
+{{- end}}
+
+export const {{.Name}}BaseTranslations = {
+{{range .LangList -}}
+  {{if eq . "en"}}
+  '{{.}}-US': {{.}},
+  {{- end}}
+  {{if eq . "zh"}}
+  '{{.}}-CN': {{.}},
+  {{- end -}}
+  {{- if and (ne . "en") (ne . "zh") -}}
+  {{.}},
+  {{- end}}
+{{- end}}
+}
