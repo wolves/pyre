@@ -1,0 +1,14 @@
+import { createFeature, createReducer, on } from '@ngrx/store';
+import { {{.Name}}State } from './state';
+import * as {{.Name}}Actions from './{{.Filename}}.actions';
+
+export const initialState: {{.Name}}State = {
+
+};
+
+export const {{.Name}}Feature = createFeature({
+  name: '{{.Name}}',
+  reducer: createReducer(
+    initialState,
+  ),
+});

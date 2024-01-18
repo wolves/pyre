@@ -1,0 +1,8 @@
+import { inject, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as {{.Name}}Actions from './{{.Filename}}.actions';
+
+@Injectable()
+export class {{.Name}}Facade {
+  private store = inject(Store);
+}

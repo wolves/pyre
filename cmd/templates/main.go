@@ -29,3 +29,45 @@ func PublicApiTemplate() []byte {
 func FeatureComponentTemplate() []byte {
 	return featureComponentTemplate
 }
+
+//go:embed files/state/feature-state.module.ts.tmpl
+var stateModuleTemplate []byte
+
+//go:embed files/state/state.ts.tmpl
+var stateTemplate []byte
+
+//go:embed files/state/feature.actions.ts.tmpl
+var actionsTemplate []byte
+
+//go:embed files/state/feature.effects.ts.tmpl
+var effectsTemplate []byte
+
+//go:embed files/state/feature.facade.ts.tmpl
+var facadeTemplate []byte
+
+//go:embed files/state/feature.reducer.ts.tmpl
+var reducerTemplate []byte
+
+//go:embed files/state/feature.selector.ts.tmpl
+var selectorTemplate []byte
+
+func CreateStateTemplate(key string) []byte {
+	switch key {
+	case "stateModule":
+		return stateModuleTemplate
+	case "actions":
+		return actionsTemplate
+	case "effects":
+		return effectsTemplate
+	case "facade":
+		return facadeTemplate
+	case "reducer":
+		return reducerTemplate
+	case "selector":
+		return selectorTemplate
+	case "state":
+		return stateTemplate
+	}
+
+	return []byte{}
+}

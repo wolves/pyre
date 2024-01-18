@@ -1,0 +1,15 @@
+import { NgModule } from '@angular/core';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { {{.Name}}Effects } from './{{.Filename}}.effects';
+import { {{.Name}}Facade } from './{{.Filename}}.facade';
+import { {{.Name}}Feature } from './{{.Filename}}.reducer';
+
+@NgModule({
+  imports: [
+    StoreModule.forFeature({{.Name}}Feature),
+    EffectsModule.forFeature([{{.Name}}Effects]),
+  ],
+  providers: [{{.Name}}Facade],
+})
+export class {{.Name}}StateModule {}

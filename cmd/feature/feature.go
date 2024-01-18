@@ -15,6 +15,9 @@ type Component struct {
 	SunbirdDir string
 	Filename   string
 	Name       string
+
+	srcPath   string
+	statePath string
 }
 
 func (c *Component) Create() error {
@@ -32,9 +35,11 @@ func (c *Component) Create() error {
 
 	srcPath, err := createSrcDir(featPath)
 	cobra.CheckErr(err)
+	c.srcPath = srcPath
 
 	statePath, err := createStateDir(featPath)
 	cobra.CheckErr(err)
+	c.statePath = statePath
 
 	indexFile, err := os.Create(filepath.Join(featPath, "index.ts"))
 	cobra.CheckErr(err)
@@ -66,7 +71,7 @@ func (c *Component) Create() error {
 		return err
 	}
 
-	err = createStateFiles(statePath)
+	err = c.createStateFiles()
 	cobra.CheckErr(err)
 
 	componentFile, err := os.Create(filepath.Join(srcPath, c.Filename+".component.ts"))
@@ -127,6 +132,30 @@ func createStateDir(featPath string) (string, error) {
 	return statePath, nil
 }
 
-func createStateFiles(statePath string) error {
+func (c Component) createStateFiles() error {
+	stateMap := map[string]string{
+		"stateModule": c.Filename + "-state.module.ts",
+		"actions":     c.Filename + ".actions.ts",
+		"effects":     c.Filename + ".effects.ts",
+		"facade":      c.Filename + ".facade.ts",
+		"reducer":     c.Filename + ".reducer.ts",
+		"selector":    c.Filename + ".selector.ts",
+		"state":       "state.ts",
+	}
+
+	for key, file := range stateMap {
+		createdFile, err := os.Create(filepath.Join(c.statePath, file))
+		if err != nil {
+			return fmt.Errorf("Error: State file creation error: %v", err)
+		}
+		defer createdFile.Close()
+
+		createdTmpl := template.Must(template.New(key).Parse(string(templates.CreateStateTemplate(key))))
+		err = createdTmpl.Execute(createdFile, c)
+		if err != nil {
+			return fmt.Errorf("Error: State template execution error: %v", err)
+		}
+	}
+
 	return nil
 }

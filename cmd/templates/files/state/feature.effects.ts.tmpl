@@ -1,0 +1,12 @@
+import { inject, Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { {{.Name}}Service } from '../services/{{.Filename}}.service';
+import * as {{.Name}}Actions from './{{.Filename}}.actions';
+
+@Injectable()
+export class {{.Name}}Effects {
+  actions$ = inject(Actions);
+  service = inject({{.Name}}Service);
+
+}
