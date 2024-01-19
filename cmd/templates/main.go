@@ -92,3 +92,31 @@ func I18nTemplate() []byte {
 func I18nIndexTemplate() []byte {
 	return i18nIndexTemplate
 }
+
+//go:embed files/models/feature.model.ts.tmpl
+var modelTemplate []byte
+
+//go:embed files/models/feature-response.model.ts.tmpl
+var responseModelTemplate []byte
+
+func ModelTemplate() []byte {
+	return modelTemplate
+}
+
+func ResponseModelTemplate() []byte {
+	return responseModelTemplate
+}
+
+//go:embed files/services/feature.service.ts.tmpl
+var serviceTemplate []byte
+
+//go:embed files/services/feature.adapter.ts.tmpl
+var adapterTemplate []byte
+
+func ServiceTemplate() []byte {
+	return serviceTemplate
+}
+
+func AdapterTemplate() []byte {
+	return adapterTemplate
+}

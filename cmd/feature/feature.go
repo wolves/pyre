@@ -17,9 +17,11 @@ type Component struct {
 	Filename   string
 	Name       string
 
-	srcPath   string
-	statePath string
-	i18nPath  string
+	srcPath      string
+	statePath    string
+	i18nPath     string
+	modelsPath   string
+	servicesPath string
 }
 
 func (c *Component) Create() error {
@@ -33,23 +35,6 @@ func (c *Component) Create() error {
 	}
 
 	featPath, err := createFeatureDir(projPath, c.Filename)
-	cobra.CheckErr(err)
-
-	srcPath, err := createSrcDir(featPath)
-	cobra.CheckErr(err)
-	c.srcPath = srcPath
-
-	statePath, err := c.createStateDir()
-	cobra.CheckErr(err)
-	c.statePath = statePath
-
-	langs := []string{"de", "en", "fr", "ja", "ru", "tr", "zh"}
-
-	i18nPath, err := c.createI18nDirs(langs)
-	cobra.CheckErr(err)
-	c.i18nPath = i18nPath
-
-	err = c.createI18nFiles(langs)
 	cobra.CheckErr(err)
 
 	indexFile, err := os.Create(filepath.Join(featPath, "index.ts"))
@@ -82,7 +67,38 @@ func (c *Component) Create() error {
 		return err
 	}
 
+	srcPath, err := createSrcDir(featPath)
+	cobra.CheckErr(err)
+	c.srcPath = srcPath
+
+	statePath, err := c.createStateDir()
+	cobra.CheckErr(err)
+	c.statePath = statePath
+
 	err = c.createStateFiles()
+	cobra.CheckErr(err)
+
+	langs := []string{"de", "en", "fr", "ja", "ru", "tr", "zh"}
+
+	i18nPath, err := c.createI18nDirs(langs)
+	cobra.CheckErr(err)
+	c.i18nPath = i18nPath
+
+	err = c.createI18nFiles(langs)
+	cobra.CheckErr(err)
+
+	modelsPath, err := c.createModelsDir()
+	cobra.CheckErr(err)
+	c.modelsPath = modelsPath
+
+	err = c.createModelFiles()
+	cobra.CheckErr(err)
+
+	servicesPath, err := c.createServicesDir()
+	cobra.CheckErr(err)
+	c.servicesPath = servicesPath
+
+	err = c.createServiceFiles()
 	cobra.CheckErr(err)
 
 	componentFile, err := os.Create(filepath.Join(srcPath, c.Filename+".component.ts"))
@@ -253,5 +269,43 @@ func (c Component) createI18nFiles(langs []string) error {
 		return fmt.Errorf("Error: i18n translations template execution error: %v", err)
 	}
 
+	return nil
+}
+
+func (c Component) createModelsDir() (string, error) {
+	modelsPath := filepath.Join(c.srcPath, "models")
+	if _, err := os.Stat(modelsPath); os.IsNotExist(err) {
+		err = os.Mkdir(modelsPath, 0o751)
+		if err != nil {
+			log.Printf("Error creating models directory: %v\n", err)
+			return "", err
+		}
+	} else {
+		log.Printf("models directory with path '%s' already exists", modelsPath)
+	}
+
+	return modelsPath, nil
+}
+
+func (c Component) createModelFiles() error {
+	return nil
+}
+
+func (c Component) createServicesDir() (string, error) {
+	servicesPath := filepath.Join(c.srcPath, "services")
+	if _, err := os.Stat(servicesPath); os.IsNotExist(err) {
+		err = os.Mkdir(servicesPath, 0o751)
+		if err != nil {
+			log.Printf("Error creating services directory: %v\n", err)
+			return "", err
+		}
+	} else {
+		log.Printf("services directory with path '%s' already exists", servicesPath)
+	}
+
+	return servicesPath, nil
+}
+
+func (c Component) createServiceFiles() error {
 	return nil
 }

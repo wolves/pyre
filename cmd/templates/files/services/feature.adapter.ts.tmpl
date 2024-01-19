@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { SunAdapter } from 'sunbird-seven-ui/core';
+import { {{.Name}}Model } from '../models/{{.Filename}}.model';
+import { {{.Name}}Response } from '../models/{{.Filename}}-response.model'
+
+@Injectable({
+  providedIn: 'root',
+})
+export class {{.Name}}Adapter
+  implements SunAdapter<{{.Name}}Response, {{.Name}}Model>
+{
+  adapt(item: {{.Name}}Response): {{.Name}}Model {
+    const attrs = item.data.attributes;
+
+    return {
+
+    }
+  }
+}
