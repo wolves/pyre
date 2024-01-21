@@ -288,6 +288,30 @@ func (c Component) createModelsDir() (string, error) {
 }
 
 func (c Component) createModelFiles() error {
+	modelFile, err := os.Create(filepath.Join(c.modelsPath, c.Filename+".model.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: model file creation error: %v", err)
+	}
+	defer modelFile.Close()
+
+	responseModelFile, err := os.Create(filepath.Join(c.modelsPath, c.Filename+"-response.model.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: response model file creation error: %v", err)
+	}
+	defer responseModelFile.Close()
+
+	modelTmpl := template.Must(template.New("model").Parse(string(templates.ModelTemplate())))
+	err = modelTmpl.Execute(modelFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: model template execution error: %v", err)
+	}
+
+	responseModelTmpl := template.Must(template.New("response-model").Parse(string(templates.ResponseModelTemplate())))
+	err = responseModelTmpl.Execute(responseModelFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: response model template execution error: %v", err)
+	}
+
 	return nil
 }
 
