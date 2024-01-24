@@ -2,11 +2,11 @@ package feature
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 
 	"github.com/spf13/cobra"
 	"github.com/wolves/pyre/cmd/templates"
