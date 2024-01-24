@@ -331,5 +331,29 @@ func (c Component) createServicesDir() (string, error) {
 }
 
 func (c Component) createServiceFiles() error {
+	serviceFile, err := os.Create(filepath.Join(c.servicesPath, c.Filename+".service.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: service file creation error: %v", err)
+	}
+	defer serviceFile.Close()
+
+	adapterFile, err := os.Create(filepath.Join(c.servicesPath, c.Filename+".adapter.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: service adapter file creation error: %v", err)
+	}
+	defer adapterFile.Close()
+
+	serviceTmpl := template.Must(template.New("service").Parse(string(templates.ServiceTemplate())))
+	err = serviceTmpl.Execute(serviceFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: service template execution error: %v", err)
+	}
+
+	adapterTmpl := template.Must(template.New("adapter").Parse(string(templates.AdapterTemplate())))
+	err = adapterTmpl.Execute(adapterFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: service adapter template execution error: %v", err)
+	}
+
 	return nil
 }
