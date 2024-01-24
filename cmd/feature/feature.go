@@ -101,15 +101,8 @@ func (c *Component) Create() error {
 	err = c.createServiceFiles()
 	cobra.CheckErr(err)
 
-	componentFile, err := os.Create(filepath.Join(srcPath, c.Filename+".component.ts"))
+	err = c.createComponentFiles()
 	cobra.CheckErr(err)
-	defer componentFile.Close()
-
-	componentTemplate := template.Must(template.New("component").Parse(string(templates.ComponentTemplate())))
-	err = componentTemplate.Execute(componentFile, c)
-	if err != nil {
-		return err
-	}
 
 	return nil
 }
@@ -353,6 +346,46 @@ func (c Component) createServiceFiles() error {
 	err = adapterTmpl.Execute(adapterFile, c)
 	if err != nil {
 		return fmt.Errorf("Error: service adapter template execution error: %v", err)
+	}
+
+	return nil
+}
+
+func (c Component) createComponentFiles() error {
+	moduleFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+".module.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: module file creation error: %v", err)
+	}
+	defer moduleFile.Close()
+
+	componentFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+".component.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: component file creation error: %v", err)
+	}
+	defer componentFile.Close()
+
+	routingFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+"-routing.module.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: routing file creation error: %v", err)
+	}
+	defer routingFile.Close()
+
+	moduleTemplate := template.Must(template.New("module").Parse(string(templates.ModuleTemplate())))
+	err = moduleTemplate.Execute(moduleFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: module template execution error: %v", err)
+	}
+
+	componentTemplate := template.Must(template.New("component").Parse(string(templates.ComponentTemplate())))
+	err = componentTemplate.Execute(componentFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: component template execution error: %v", err)
+	}
+
+	routingTemplate := template.Must(template.New("routing").Parse(string(templates.RoutingModuleTemplate())))
+	err = routingTemplate.Execute(routingFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: routing template execution error: %v", err)
 	}
 
 	return nil

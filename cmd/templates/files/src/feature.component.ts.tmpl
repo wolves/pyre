@@ -24,7 +24,7 @@ import { {{.Name}}Facade } from './+state/{{.Filename}}.facade'
 export class {{.Name}}Component
   implements OnInit, SunCanDeactivateComponent
 {
-  facade = inject({{.NameFacade}});
+  facade = inject({{.Name}}Facade);
 
   ngOnInit(): void {
 

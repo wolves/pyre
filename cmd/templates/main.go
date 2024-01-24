@@ -23,11 +23,25 @@ func PublicApiTemplate() []byte {
 	return publicApiTemplate
 }
 
+//go:embed files/src/feature-routing.module.ts.tmpl
+var routingModuleTemplate []byte
+
 //go:embed files/src/feature.component.ts.tmpl
 var componentTemplate []byte
 
+//go:embed files/src/feature.module.ts.tmpl
+var moduleTemplate []byte
+
+func RoutingModuleTemplate() []byte {
+	return routingModuleTemplate
+}
+
 func ComponentTemplate() []byte {
 	return componentTemplate
+}
+
+func ModuleTemplate() []byte {
+	return moduleTemplate
 }
 
 //go:embed files/state/feature-state.module.ts.tmpl
