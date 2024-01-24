@@ -1,0 +1,18 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { SunCanDeactivateGuard } from 'sunbird-seven-ui';
+import { {{.Name}}Component } from './{{.Filename}}.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: {{.Name}}Component,
+    canDeactivate: [SunCanDeactivateGuard],
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class {{.Name}}RoutingModule {}

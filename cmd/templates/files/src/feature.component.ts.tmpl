@@ -1,12 +1,39 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { of } from 'rxjs';
+import {
+  SunCanDeactivateComponent,
+} from 'sunbird-seven-ui';
+
+import { {{.Name}}Facade } from './+state/{{.Filename}}.facade'
 
 @Component({
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   selector: "lib-{{.Filename}}",
   templateUrl: "./{{.Filename}}.component.html",
   styleUrls: ["./{{.Filename}}.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class {{.Name}}Component {
+export class {{.Name}}Component
+  implements OnInit, SunCanDeactivateComponent
+{
+  facade = inject({{.NameFacade}});
+
+  ngOnInit(): void {
+
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  canDeactivate(): Observable<boolean> | boolean {
+    // TODO: Swap out the default "true" return value with actual canDeactivate
+    // logic or if not needed remove the function block and corresponding imports
+    return of(true)
+  }
 }

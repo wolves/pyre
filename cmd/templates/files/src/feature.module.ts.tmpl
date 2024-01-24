@@ -1,0 +1,30 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { SunCanDeactivateGuardModule } from 'sunbird-seven-ui';
+import { SunI18nModule, SunTranslationService } from 'sunbird-seven-ui/core';
+import { {{.Name}}StateModule } from './+state/{{.Filename}}-state.module';
+import { {{.Name}}BaseTranslations } from './assets/translations/translations';
+import { {{.Name}}RoutingModule } from './{{.Filename}}-routing.module';
+import { {{.Name}}Component } from './{{.Filename}}.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    {{.Name}}StateModule,
+    SunCanDeactivateGuardModule,
+    SunI18nModule,
+    {{.Name}}Component,
+    {{.Name}}RoutingModule,
+  ],
+})
+export class {{.Name}}Module {
+  constructor(private translationService: SunTranslationService) {
+    type LangKey = keyof typeof {{.Name}}BaseTranslations;
+    for (let key of Object.keys({{.Name}}BaseTranslations)) {
+      this.translationService.setTranslation(
+        key,
+        {{.Name}}BaseTranslations[key as LangKey],
+      );
+    }
+  }
+}

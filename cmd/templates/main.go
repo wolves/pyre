@@ -11,9 +11,6 @@ var ngPackageTemplate []byte
 //go:embed files/public-api.ts.tmpl
 var publicApiTemplate []byte
 
-//go:embed files/src/feature.component.ts.tmpl
-var featureComponentTemplate []byte
-
 func IndexTemplate() []byte {
 	return indexTemplate
 }
@@ -26,8 +23,11 @@ func PublicApiTemplate() []byte {
 	return publicApiTemplate
 }
 
-func FeatureComponentTemplate() []byte {
-	return featureComponentTemplate
+//go:embed files/src/feature.component.ts.tmpl
+var componentTemplate []byte
+
+func ComponentTemplate() []byte {
+	return componentTemplate
 }
 
 //go:embed files/state/feature-state.module.ts.tmpl

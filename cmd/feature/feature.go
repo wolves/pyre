@@ -105,7 +105,7 @@ func (c *Component) Create() error {
 	cobra.CheckErr(err)
 	defer componentFile.Close()
 
-	componentTemplate := template.Must(template.New("component").Parse(string(templates.FeatureComponentTemplate())))
+	componentTemplate := template.Must(template.New("component").Parse(string(templates.ComponentTemplate())))
 	err = componentTemplate.Execute(componentFile, c)
 	if err != nil {
 		return err
