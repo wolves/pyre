@@ -26,6 +26,12 @@ func PublicApiTemplate() []byte {
 //go:embed files/src/feature-routing.module.ts.tmpl
 var routingModuleTemplate []byte
 
+//go:embed files/src/feature.component.html.tmpl
+var htmlTemplate []byte
+
+//go:embed files/src/feature.component.scss.tmpl
+var scssTemplate []byte
+
 //go:embed files/src/feature.component.ts.tmpl
 var componentTemplate []byte
 
@@ -34,6 +40,14 @@ var moduleTemplate []byte
 
 func RoutingModuleTemplate() []byte {
 	return routingModuleTemplate
+}
+
+func HtmlTemplate() []byte {
+	return htmlTemplate
+}
+
+func ScssTemplate() []byte {
+	return scssTemplate
 }
 
 func ComponentTemplate() []byte {

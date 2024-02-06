@@ -364,6 +364,18 @@ func (c Component) createComponentFiles() error {
 	}
 	defer componentFile.Close()
 
+	htmlFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+".component.html"))
+	if err != nil {
+		return fmt.Errorf("Error: component html template creation error: %v", err)
+	}
+	defer htmlFile.Close()
+
+	scssFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+".component.scss"))
+	if err != nil {
+		return fmt.Errorf("Error: component scss template creation error: %v", err)
+	}
+	defer scssFile.Close()
+
 	routingFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+"-routing.module.ts"))
 	if err != nil {
 		return fmt.Errorf("Error: routing file creation error: %v", err)
@@ -380,6 +392,18 @@ func (c Component) createComponentFiles() error {
 	err = componentTemplate.Execute(componentFile, c)
 	if err != nil {
 		return fmt.Errorf("Error: component template execution error: %v", err)
+	}
+
+	htmlTemplate := template.Must(template.New("html").Parse(string(templates.HtmlTemplate())))
+	err = htmlTemplate.Execute(htmlFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: html template execution error: %v", err)
+	}
+
+	scssTemplate := template.Must(template.New("scss").Parse(string(templates.ScssTemplate())))
+	err = scssTemplate.Execute(scssFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: scss template execution error: %v", err)
 	}
 
 	routingTemplate := template.Must(template.New("routing").Parse(string(templates.RoutingModuleTemplate())))
