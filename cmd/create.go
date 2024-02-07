@@ -34,7 +34,10 @@ specs, styles, and ngrx state management files.`,
 			Name:       kebabToTitle(args[0]),
 		}
 
-		err := c.Create()
+		noTests, err := cmd.Flags().GetBool("no-tests")
+		cobra.CheckErr(err)
+
+		err = c.Create(noTests)
 		cobra.CheckErr(err)
 	},
 }
@@ -51,7 +54,7 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	createCmd.Flags().BoolP("no-tests", "x", false, "Create files without test specs")
 }
 
 func kebabToTitle(s string) string {

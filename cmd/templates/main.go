@@ -100,6 +100,38 @@ func CreateStateTemplate(key string) []byte {
 	return []byte{}
 }
 
+//go:embed files/state/feature.actions.spec.ts.tmpl
+var actionsTestTemplate []byte
+
+//go:embed files/state/feature.effects.spec.ts.tmpl
+var effectsTestTemplate []byte
+
+//go:embed files/state/feature.facade.spec.ts.tmpl
+var facadeTestTemplate []byte
+
+//go:embed files/state/feature.reducer.spec.ts.tmpl
+var reducerTestTemplate []byte
+
+//go:embed files/state/feature.selector.spec.ts.tmpl
+var selectorTestTemplate []byte
+
+func CreateStateTestTemplate(key string) []byte {
+	switch key {
+	case "actions":
+		return actionsTestTemplate
+	case "effects":
+		return effectsTestTemplate
+	case "facade":
+		return facadeTestTemplate
+	case "reducer":
+		return reducerTestTemplate
+	case "selector":
+		return selectorTestTemplate
+	}
+
+	return []byte{}
+}
+
 //go:embed files/translations/translations.ts.tmpl
 var translationsTemplate []byte
 

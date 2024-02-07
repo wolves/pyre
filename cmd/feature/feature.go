@@ -24,9 +24,7 @@ type Component struct {
 	servicesPath string
 }
 
-func (c *Component) Create() error {
-	fmt.Printf("Component %+v", c)
-
+func (c *Component) Create(noTests bool) error {
 	// TODO: Add actual way to either select or provide a real project dir
 	projPath := filepath.Join(c.SunbirdDir, "exp")
 	if _, err := os.Stat(projPath); os.IsNotExist(err) {
@@ -103,6 +101,11 @@ func (c *Component) Create() error {
 
 	err = c.createComponentFiles()
 	cobra.CheckErr(err)
+
+	if !noTests {
+		err = c.createTestFiles()
+		cobra.CheckErr(err)
+	}
 
 	return nil
 }
@@ -410,6 +413,33 @@ func (c Component) createComponentFiles() error {
 	err = routingTemplate.Execute(routingFile, c)
 	if err != nil {
 		return fmt.Errorf("Error: routing template execution error: %v", err)
+	}
+
+	return nil
+}
+
+func (c Component) createTestFiles() error {
+	fmt.Println("CREATING SPECS")
+	stateMap := map[string]string{
+		"actions":  c.Filename + ".actions.spec.ts",
+		"effects":  c.Filename + ".effects.spec.ts",
+		"facade":   c.Filename + ".facade.spec.ts",
+		"reducer":  c.Filename + ".reducer.spec.ts",
+		"selector": c.Filename + ".selector.spec.ts",
+	}
+
+	for key, file := range stateMap {
+		createdFile, err := os.Create(filepath.Join(c.statePath, file))
+		if err != nil {
+			return fmt.Errorf("Error: State file creation error: %v", err)
+		}
+		defer createdFile.Close()
+
+		createdTmpl := template.Must(template.New(key).Parse(string(templates.CreateStateTestTemplate(key))))
+		err = createdTmpl.Execute(createdFile, c)
+		if err != nil {
+			return fmt.Errorf("Error: State template execution error: %v", err)
+		}
 	}
 
 	return nil
