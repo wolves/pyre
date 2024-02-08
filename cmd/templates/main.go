@@ -35,6 +35,9 @@ var scssTemplate []byte
 //go:embed files/src/feature.component.ts.tmpl
 var componentTemplate []byte
 
+//go:embed files/src/feature.component.spec.ts.tmpl
+var componentTestTemplate []byte
+
 //go:embed files/src/feature.module.ts.tmpl
 var moduleTemplate []byte
 
@@ -52,6 +55,10 @@ func ScssTemplate() []byte {
 
 func ComponentTemplate() []byte {
 	return componentTemplate
+}
+
+func ComponentTestTemplate() []byte {
+	return componentTestTemplate
 }
 
 func ModuleTemplate() []byte {
@@ -165,11 +172,18 @@ func ResponseModelTemplate() []byte {
 //go:embed files/services/feature.service.ts.tmpl
 var serviceTemplate []byte
 
+//go:embed files/services/feature.service.spec.ts.tmpl
+var serviceTestTemplate []byte
+
 //go:embed files/services/feature.adapter.ts.tmpl
 var adapterTemplate []byte
 
 func ServiceTemplate() []byte {
 	return serviceTemplate
+}
+
+func ServiceTestTemplate() []byte {
+	return serviceTestTemplate
 }
 
 func AdapterTemplate() []byte {
