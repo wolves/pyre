@@ -6,7 +6,7 @@ import { {{.Name}}Service } from './{{.Filename}}.service';
 
 const endpoint = '';
 
-describe('LoadShiftService', () => {
+describe('{{.Name}}Service', () => {
   let service: {{.Name}}Service;
   let controller: HttpTestingController;
 
@@ -17,5 +17,10 @@ describe('LoadShiftService', () => {
     });
     service = TestBed.inject({{.Name}}Service);
     controller = TestBed.inject(HttpTestingController);
+  });
+  
+  // TODO: Remove this placeholder test when you begin writing actual ones
+  it('should run a test', () => {
+    expect(true).toBeTruthy();
   });
 })
