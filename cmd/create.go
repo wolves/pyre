@@ -4,11 +4,10 @@ Copyright © 2024 Christopher Stingl <cs@wlvs.io>
 package cmd
 
 import (
-	"fmt"
+	"errors"
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/wolves/pyre/cmd/feature"
 )
 
@@ -16,29 +15,42 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new Sunbird project feature",
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("cannot create: feature name argument required (ex: some-feature-name)")
+		}
+
+		if len(args) > 1 {
+			return errors.New("cannot create: too many arguments. Only a single feature name is allowed (ex: some-feature-name)")
+		}
+
+		return nil
+	},
 	Long: `Create a Sunbird project feature
 
 Generates the necessary Angular files for a default, bare-bones
 project feature component. This includes the component files along with
 specs, styles, and ngrx state management files.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called", args)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		var c feature.Component
 
-		projects := viper.Get("projects")
-
-		fmt.Println("Projs", projects)
-
-		c := feature.Component{
+		c = feature.Component{
 			SunbirdDir: getSunbirdDir(),
 			Filename:   args[0],
 			Name:       kebabToTitle(args[0]),
 		}
+		// } else {
+		// 	fmt.Fprint(os.Stderr, "cannot create: feature name argument required (ex: some-feature-name)\n")
+		// 	os.Exit(1)
+		// }
 
 		noTests, err := cmd.Flags().GetBool("no-tests")
 		cobra.CheckErr(err)
 
 		err = c.Create(noTests)
 		cobra.CheckErr(err)
+
+		return nil
 	},
 }
 
