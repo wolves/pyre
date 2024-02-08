@@ -421,24 +421,23 @@ func (c Component) createComponentFiles() error {
 func (c Component) createTestFiles() error {
 	fmt.Println("CREATING SPECS")
 	stateMap := map[string]string{
-		"actions":  c.Filename + ".actions.spec.ts",
-		"effects":  c.Filename + ".effects.spec.ts",
-		"facade":   c.Filename + ".facade.spec.ts",
-		"reducer":  c.Filename + ".reducer.spec.ts",
-		"selector": c.Filename + ".selector.spec.ts",
+		"actions": c.Filename + ".actions.spec.ts",
+		"effects": c.Filename + ".effects.spec.ts",
+		"facade":  c.Filename + ".facade.spec.ts",
+		"reducer": c.Filename + ".reducer.spec.ts",
 	}
 
 	for key, file := range stateMap {
 		createdFile, err := os.Create(filepath.Join(c.statePath, file))
 		if err != nil {
-			return fmt.Errorf("Error: State file creation error: %v", err)
+			return fmt.Errorf("Error: State test file creation error: %v", err)
 		}
 		defer createdFile.Close()
 
 		createdTmpl := template.Must(template.New(key).Parse(string(templates.CreateStateTestTemplate(key))))
 		err = createdTmpl.Execute(createdFile, c)
 		if err != nil {
-			return fmt.Errorf("Error: State template execution error: %v", err)
+			return fmt.Errorf("Error: State test template execution error: %v", err)
 		}
 	}
 

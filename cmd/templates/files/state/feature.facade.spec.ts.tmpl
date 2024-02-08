@@ -1,0 +1,24 @@
+import { TestBed } from '@angular/core/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
+import { {{.Name}}Facade } from './{{.Filename}}.facade';
+import { initialState } from './{{.Filename}}.reducer';
+import * as {{.Name}}Actions from './{{.Filename}}.actions';
+
+describe('{{.Name}}Facade', () => {
+  let facade: {{.Name}}Facade;
+  let store: MockStore;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {{.Name}}Facade,
+        provideMockStore({
+          initialState,
+        }),
+      ],
+    });
+    facade = TestBed.inject({{.Name}}Facade);
+    store = TestBed.inject(MockStore);
+  });
+});

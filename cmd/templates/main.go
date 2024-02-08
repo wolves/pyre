@@ -112,9 +112,6 @@ var facadeTestTemplate []byte
 //go:embed files/state/feature.reducer.spec.ts.tmpl
 var reducerTestTemplate []byte
 
-//go:embed files/state/feature.selector.spec.ts.tmpl
-var selectorTestTemplate []byte
-
 func CreateStateTestTemplate(key string) []byte {
 	switch key {
 	case "actions":
@@ -125,8 +122,6 @@ func CreateStateTestTemplate(key string) []byte {
 		return facadeTestTemplate
 	case "reducer":
 		return reducerTestTemplate
-	case "selector":
-		return selectorTestTemplate
 	}
 
 	return []byte{}

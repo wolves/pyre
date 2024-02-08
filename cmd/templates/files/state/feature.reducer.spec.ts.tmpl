@@ -1,0 +1,9 @@
+import { initialState, {{.Name}}Feature } from './{{.Filename}}.reducer';
+import * as {{.Name}}Actions from './{{.Filename}}.actions';
+
+describe('{{.Name}}Reducer', () => {
+  it('should return the initialState', () => {
+    const state = {{.Name}}Feature.reducer(undefined, { type: 'init' });
+    expect(state).toEqual(initialState);
+  });
+});

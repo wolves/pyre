@@ -1,0 +1,41 @@
+import { TestBed } from '@angular/core/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Action } from '@ngrx/store';
+import { Observable, of, throwError } from 'rxjs';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
+import { {{.Name}}Service } from '../services/{{.Filename}}.service';
+import { {{.Name}}Effects } from './{{.Filename}}.effects';
+import { {{.Name}}State } from './state';
+import { initialState } from './{{.Filename}}.reducer';
+import * as {{.Name}}Actions from './{{.Filename}}.actions';
+
+describe('LoadShiftEffects', () => {
+  let actions$: Observable<Action>;
+  let effects: {{.Name}}Effects;
+  let store: MockStore<{{.Name}}State>;
+  let mock{{.Name}}Service: Pick<{{.Name}}Service, keyof {{.Name}}Service>;
+
+  beforeEach(() => {
+    mock{{.Name}}Service = {};
+
+    TestBed.configureTestingModule({
+      imports: [SunI18nTestingModule],
+      providers: [
+        {{.Name}}Effects,
+        provideMockActions(() => actions$),
+        provideMockStore({
+          initialState,
+        }),
+        { provide: {{.Name}}Service, useValue: mock{{.Name}}Service },
+      ],
+    });
+
+    effects = TestBed.inject({{.Name}}Effects);
+    store = TestBed.inject(MockStore);
+  });
+
+  it('should be created', () => {
+    expect(effects).toBeTruthy();
+  });
+});
