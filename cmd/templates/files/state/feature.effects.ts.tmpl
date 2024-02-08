@@ -6,7 +6,7 @@ import * as {{.Name}}Actions from './{{.Filename}}.actions';
 
 @Injectable()
 export class {{.Name}}Effects {
-  actions$ = inject(Actions);
-  service = inject({{.Name}}Service);
+  private _actions$ = inject(Actions);
+  private _service = inject({{.Name}}Service);
 
 }
