@@ -441,5 +441,29 @@ func (c Component) createTestFiles() error {
 		}
 	}
 
+	serviceTestFile, err := os.Create(filepath.Join(c.servicesPath, c.Filename+".service.spec.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: Service test file creation error: %v", err)
+	}
+	defer serviceTestFile.Close()
+
+	serviceTestTmpl := template.Must(template.New("serviceTest").Parse(string(templates.ServiceTestTemplate())))
+	err = serviceTestTmpl.Execute(serviceTestFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: Service test template execution error: %v", err)
+	}
+
+	componentTestFile, err := os.Create(filepath.Join(c.srcPath, c.Filename+".component.spec.ts"))
+	if err != nil {
+		return fmt.Errorf("Error: Component test file creation error: %v", err)
+	}
+	defer componentTestFile.Close()
+
+	componentTestTmpl := template.Must(template.New("serviceTest").Parse(string(templates.ComponentTestTemplate())))
+	err = componentTestTmpl.Execute(componentTestFile, c)
+	if err != nil {
+		return fmt.Errorf("Error: Component test template execution error: %v", err)
+	}
+
 	return nil
 }
