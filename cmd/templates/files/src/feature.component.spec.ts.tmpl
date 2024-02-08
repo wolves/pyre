@@ -1,0 +1,33 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { SunI18nTestingModule } from 'sunbird-seven-ui/core';
+
+import { {{.Name}}Facade } from './+state/{{.Filename}}.facade';
+import { {{.Name}}Component } from './{{.Filename}}.component';
+
+describe('{{.Name}}Component', () => {
+  let component: {{.Name}}Component;
+  let fixture: ComponentFixture<{{.Name}}Component>;
+  let mock{{.Name}}Facade: Pick<{{.Name}}Facade, keyof {{.Name}}Facade>;
+
+  beforeEach(
+    waitForAsync(() => {
+      mock{{.Name}}Facade = {};
+      TestBed.configureTestingModule({
+        imports: [SunI18nTestingModule],
+        providers: [{ provide: {{.Name}}Facade, useValue: mock{{.Name}}Facade }],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent({{.Name}}Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
