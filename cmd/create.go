@@ -39,10 +39,6 @@ specs, styles, and ngrx state management files.`,
 			Filename:   args[0],
 			Name:       kebabToTitle(args[0]),
 		}
-		// } else {
-		// 	fmt.Fprint(os.Stderr, "cannot create: feature name argument required (ex: some-feature-name)\n")
-		// 	os.Exit(1)
-		// }
 
 		noTests, err := cmd.Flags().GetBool("no-tests")
 		cobra.CheckErr(err)
