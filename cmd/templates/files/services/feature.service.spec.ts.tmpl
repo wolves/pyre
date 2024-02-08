@@ -1,0 +1,21 @@
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+
+import { {{.Name}}Model } from '../models/{{.Filename}}.model';
+import { {{.Name}}Service } from './{{.Filename}}.service';
+
+const endpoint = '';
+
+describe('LoadShiftService', () => {
+  let service: {{.Name}}Service;
+  let controller: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [{{.Name}}Service],
+    });
+    service = TestBed.inject({{.Name}}Service);
+    controller = TestBed.inject(HttpTestingController);
+  });
+})
