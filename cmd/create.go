@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -34,6 +35,11 @@ specs, styles, and ngrx state management files.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var c feature.Component
 
+		cPath, err := cmd.Flags().GetString("path")
+		cobra.CheckErr(err)
+
+		fmt.Printf("Path flag value: %s", cPath)
+
 		c = feature.Component{
 			SunbirdDir: getSunbirdDir(),
 			Filename:   args[0],
@@ -51,7 +57,7 @@ specs, styles, and ngrx state management files.`,
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	// cobra.OnInitialize(initConfig)
 	featureCmd.AddCommand(createCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -63,6 +69,7 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	createCmd.Flags().BoolP("no-tests", "x", false, "Create files without test specs")
+	createCmd.Flags().StringP("path", "p", "", "Path to the directory where the feature component should be created")
 }
 
 func kebabToTitle(s string) string {
