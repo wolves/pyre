@@ -7,6 +7,7 @@ _A CLI helper for common Sunbird development tasks_
 - [Description](#desc)
 - [Install](#install)
 - [Usage Examples](#usage)
+- [Shell Completion Files](#completions)
 
 <a id="desc"></a>
 
@@ -118,3 +119,9 @@ _Results in:_
 ├── ng-package.json
 └── public-api.json
 ```
+
+<a id="completions"></a>
+
+### Shell Completion Files
+
+Shell auto-completion files for Bash, Zsh, and Fish can be found in the `completions/` directory that is provided withing any of the Archives on the [releases page](https://github.com/wolves/pyre/releases/latest)
