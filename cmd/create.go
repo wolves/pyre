@@ -6,6 +6,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -38,12 +39,17 @@ specs, styles, and ngrx state management files.`,
 		cPath, err := cmd.Flags().GetString("path")
 		cobra.CheckErr(err)
 
-		fmt.Printf("Path flag value: %s", cPath)
+		if _, err := os.Stat(cPath); os.IsNotExist(err) {
+			fmt.Fprintf(os.Stderr, "Project directory %s does not exist.\n", cPath)
+			os.Exit(1)
+		}
+
+		fmt.Printf("Path flag value: %s\n", cPath)
 
 		c = feature.Component{
-			SunbirdDir: getSunbirdDir(),
-			Filename:   args[0],
-			Name:       kebabToTitle(args[0]),
+			ProjPath: cPath,
+			Filename: args[0],
+			Name:     kebabToTitle(args[0]),
 		}
 
 		noTests, err := cmd.Flags().GetBool("no-tests")
@@ -68,8 +74,10 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
+	createCmd.Flags().StringP("path", "p", "", "Path to the directory where the feature component should be created (Required)")
 	createCmd.Flags().BoolP("no-tests", "x", false, "Create files without test specs")
-	createCmd.Flags().StringP("path", "p", "", "Path to the directory where the feature component should be created")
+
+	createCmd.MarkFlagRequired("path")
 }
 
 func kebabToTitle(s string) string {

@@ -6,7 +6,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -71,16 +70,16 @@ func initConfig() {
 	}
 }
 
-func getSunbirdDir() string {
-	homeDir, err := os.UserHomeDir()
-	cobra.CheckErr(err)
-
-	sunbirdDir := viper.GetString("sunbird_dir")
-	projPath := filepath.Join(homeDir, sunbirdDir)
-
-	if _, err := os.Stat(projPath); os.IsNotExist(err) {
-		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
-	}
-
-	return projPath
-}
+// func getSunbirdDir() string {
+// 	homeDir, err := os.UserHomeDir()
+// 	cobra.CheckErr(err)
+//
+// 	sunbirdDir := viper.GetString("sunbird_dir")
+// 	projPath := filepath.Join(homeDir, sunbirdDir)
+//
+// 	if _, err := os.Stat(projPath); os.IsNotExist(err) {
+// 		fmt.Printf("Sunbird Dir: %s - Does Not Exist\n", projPath)
+// 	}
+//
+// 	return projPath
+// }

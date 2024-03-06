@@ -13,9 +13,9 @@ import (
 )
 
 type Component struct {
-	SunbirdDir string
-	Filename   string
-	Name       string
+	ProjPath string
+	Filename string
+	Name     string
 
 	srcPath      string
 	statePath    string
@@ -25,14 +25,7 @@ type Component struct {
 }
 
 func (c *Component) Create(noTests bool) error {
-	// TODO: Add actual way to either select or provide a real project dir
-	projPath := filepath.Join(c.SunbirdDir, "exp")
-	if _, err := os.Stat(projPath); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "Project directory %s does not exist.", projPath)
-		os.Exit(1)
-	}
-
-	featPath, err := createFeatureDir(projPath, c.Filename)
+	featPath, err := createFeatureDir(c.ProjPath, c.Filename)
 	cobra.CheckErr(err)
 
 	indexFile, err := os.Create(filepath.Join(featPath, "index.ts"))
