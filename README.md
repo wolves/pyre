@@ -124,4 +124,4 @@ _Results in:_
 
 ### Shell Completion Files
 
-Shell auto-completion files for Bash, Zsh, and Fish can be found in the `completions/` directory that is provided withing any of the Archives on the [releases page](https://github.com/wolves/pyre/releases/latest)
+Shell auto-completion files for Bash, Zsh, and Fish can be found in the `completions/` directory that is provided within any of the Archives on the [releases page](https://github.com/wolves/pyre/releases/latest)
