@@ -16,7 +16,7 @@ Pyre is a CLI used to simplify some of the Sunbird development teams common task
 
 In these early stages, it is currently capable of automating the boilerplate file creation necessary for implimenting new features in the different Sunbird Angular projects.
 
-The intention is that as more pain points are indentified Pyre can me expanded to help alleviate those tasks as well.
+The intention is that as more pain points are indentified Pyre can be expanded to help alleviate those tasks as well.
 
 <a id="install"></a>
 
