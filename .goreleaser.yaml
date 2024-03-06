@@ -25,6 +25,8 @@ builds:
       - arm64
     env:
       - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/wolves/pyre/cmd.PyreVersion={{.Version}}
 
 release:
   prerelease: auto
